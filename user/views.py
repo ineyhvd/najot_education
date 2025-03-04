@@ -1,20 +1,50 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from .forms import RegisterForm, LoginForm
 from django.contrib.auth.decorators import login_required
+from .models import CustomUser
 
-def login_page(request):
+def auth_view(request):
+    login_form = LoginForm()
+    register_form = RegisterForm()
+
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('education/index')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'user/login.html', {'form': form})
+        if 'login' in request.POST:  # Login tugmasi bosilgan
+            login_form = LoginForm(request.POST)
+            if login_form.is_valid():
+                username = login_form.cleaned_data['username']
+                password = login_form.cleaned_data['password']
+                # Username bazada borligini tekshirish
+                if CustomUser.objects.filter(username=username).exists():
+                    user = authenticate(request, username=username, password=password)
+                    if user is not None:
+                        login(request, user)
+                        messages.success(request, "Xush kelibsiz!")
+                        return redirect('education:home')
+                    else:
+                        messages.error(request, "Parol noto'g'ri!")
+                else:
+                    messages.error(request, "Bu username ro'yxatdan o'tmagan!")
+
+        elif 'register' in request.POST:  # Register tugmasi bosilgan
+            register_form = RegisterForm(request.POST)
+            if register_form.is_valid():
+                user = register_form.save(commit=False)
+                user.set_password(register_form.cleaned_data['password'])
+                user.save()
+                # Avtomatik login
+                login(request, user)
+                messages.success(request, "Ro'yxatdan muvaffaqiyatli o'tdingiz!")
+                return redirect('education:home')
+
+    return render(request, 'user/auth.html', {
+        'login_form': login_form,
+        'register_form': register_form
+    })
 
 @login_required
-def logout_page(request):
+def logout_view(request):
     logout(request)
-    return redirect('login')
+    messages.success(request, "Tizimdan chiqdingiz!")
+    return redirect('user:auth')

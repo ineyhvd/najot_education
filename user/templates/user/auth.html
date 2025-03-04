@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .auth-container {
+            display: flex;
+            width: 800px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .form-section {
+            width: 50%;
+            padding: 40px;
+            text-align: center;
+        }
+        .form-section:nth-child(1) {
+            background: #f7f9fc;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #3498db;
+        }
+        button {
+            padding: 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        .message {
+            margin-bottom: 20px;
+        }
+        .error {
+            color: #e74c3c;
+        }
+        .success {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Login qismi -->
+        <div class="form-section">
+            <h2>Kirish</h2>
+            {% if messages %}
+                <div class="message">
+                    {% for message in messages %}
+                        <p class="{% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <form method="post" name="login">
+                {% csrf_token %}
+                {{ login_form.as_p }}
+                <button type="submit" name="login">Kirish</button>
+            </form>
+        </div>
+
+        <!-- Register qismi -->
+        <div class="form-section">
+            <h2>Ro'yxatdan o'tish</h2>
+            <form method="post" name="register">
+                {% csrf_token %}
+                {{ register_form.as_p }}
+                <button type="submit" name="register">Ro'yxatdan o'tish</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

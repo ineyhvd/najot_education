@@ -1,6 +1,6 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
-
-def index(request):
-    return render(request, 'education/index.html')
+@login_required
+def home_view(request):
+    return render(request, 'education/home.html', {'user': request.user})

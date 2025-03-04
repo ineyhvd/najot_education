@@ -1,12 +1,13 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from .models import CustomUser
 
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(
-        label="Phone Number",
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter your phone number"}),
-    )
-    password = forms.CharField(
-        label="Password",
-        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Enter your password"}),
-    )
+class RegisterForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password']
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
