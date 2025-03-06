@@ -41,3 +41,8 @@ def homework_qoshish(request):
 @login_required
 def about(request):
     return render(request, 'education/about.html', {'title': 'About'})
+
+@login_required
+def homework_chiqarish(request):
+    homeworks = Homework.objects.all()
+    return render(request, 'education/homework_list.html', {'homeworks': homeworks})

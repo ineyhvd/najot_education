@@ -20,7 +20,7 @@ def auth_view(request):
                     if user is not None:
                         login(request, user)
                         messages.success(request, "Xush kelibsiz!")
-                        return redirect('education:home')  # education:home ga o‘tadi
+                        return redirect('education:home')
                     else:
                         messages.error(request, "Parol noto'g'ri!")
                 else:
@@ -34,7 +34,7 @@ def auth_view(request):
                 user.save()
                 login(request, user)
                 messages.success(request, "Ro'yxatdan muvaffaqiyatli o'tdingiz!")
-                return redirect('education:home')  # education:home ga o‘tadi
+                return redirect('education:home')
 
     return render(request, 'user/auth.html', {
         'login_form': login_form,

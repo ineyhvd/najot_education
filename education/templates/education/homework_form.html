@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Uy ishi qo‘shish</title>
+</head>
+<body>
+    <h1>Uy ishi qo‘shish</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label>Talaba:</label>
+        <select name="talaba_id">
+            {% for talaba in talabalar %}
+                <option value="{{ talaba.id }}">{{ talaba }}</option>
+            {% endfor %}
+        </select><br>
+        <label>Sana:</label>
+        <input type="date" name="sana"><br>
+        <label>Topshiriq:</label>
+        <textarea name="topshiriq"></textarea><br>
+        <label>Bajarildi:</label>
+        <input type="checkbox" name="bajarildi"><br>
+        <button type="submit">Saqlash</button>
+    </form>
+</body>
+</html>
