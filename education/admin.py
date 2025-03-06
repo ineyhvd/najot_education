@@ -1,3 +1,11 @@
 from django.contrib import admin
+from .models import Talaba, Davomat
 
-# Register your models here.
+@admin.register(Talaba)
+class TalabaAdmin(admin.ModelAdmin):
+    list_display = ('ism', 'familiya')
+
+@admin.register(Davomat)
+class DavomatAdmin(admin.ModelAdmin):
+    list_display = ('talaba', 'sana', 'kelgan')
+    list_filter = ('sana', 'kelgan')
